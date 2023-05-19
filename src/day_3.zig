@@ -8,7 +8,7 @@ const transformer_back = generate_back_map();
 
 pub fn day_3(stdout: anytype) !void {
     const dir = std.fs.cwd();
-    const file = try dir.openFile("./src/rugsacks.txt", File.OpenFlags{.mode = .read_only});
+    const file = try dir.openFile("./inputs/rugsacks.txt", File.OpenFlags{.mode = .read_only});
     defer file.close();
     var reader = file.reader();
 

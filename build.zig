@@ -9,14 +9,20 @@ pub fn build(b: *std.build.Builder) void {
 
     // Standard release options allow the person running `zig build` to select
     // between Debug, ReleaseSafe, ReleaseFast, and ReleaseSmall.
-    const mode = b.standardReleaseOptions();
+    const mode = b.standardOptimizeOption(.{});
 
-    const exe = b.addExecutable("learn-zig", "src/main.zig");
-    exe.setTarget(target);
-    exe.setBuildMode(mode);
-    exe.install();
+    const src = std.build.FileSource.relative("src/main.zig");
 
-    const run_cmd = exe.run();
+    const options = std.build.ExecutableOptions {
+        .root_source_file = src,
+        .target = target,
+        .optimize = mode,
+        .name = "AoC-2022-Zig"
+    };
+    const exe = b.addExecutable(options);
+    b.installArtifact(exe);
+
+    const run_cmd = b.addRunArtifact(exe);
     run_cmd.step.dependOn(b.getInstallStep());
     if (b.args) |args| {
         run_cmd.addArgs(args);
@@ -25,10 +31,16 @@ pub fn build(b: *std.build.Builder) void {
     const run_step = b.step("run", "Run the app");
     run_step.dependOn(&run_cmd.step);
 
-    const exe_tests = b.addTest("src/main.zig");
-    exe_tests.setTarget(target);
-    exe_tests.setBuildMode(mode);
+    const test_options = std.build.TestOptions {
+        .root_source_file = src,
+        .target = target,
+        .optimize = mode,
+        .name = "AoC-2022-Zig-Test"
+    };
+    const exe_tests = b.addTest(test_options);
+
+    const run_unit_tests = b.addRunArtifact(exe_tests);
 
     const test_step = b.step("test", "Run unit tests");
-    test_step.dependOn(&exe_tests.step);
+    test_step.dependOn(&run_unit_tests.step);
 }

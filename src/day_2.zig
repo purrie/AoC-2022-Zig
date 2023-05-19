@@ -5,7 +5,7 @@ const File = std.fs.File;
 
 pub fn day_2(stdout: anytype) !void {
     const dir = std.fs.cwd();
-    const file = try dir.openFile("./src/rock-paper-scisors.txt", File.OpenFlags{.mode = .read_only});
+    const file = try dir.openFile("./inputs/rock-paper-scisors.txt", File.OpenFlags{.mode = .read_only});
     defer file.close();
     var reader = file.reader();
 

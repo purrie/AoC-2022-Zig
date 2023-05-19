@@ -5,7 +5,7 @@ const File = std.fs.File;
 
 pub fn day_1(stdout: anytype) !void {
     const dir = std.fs.cwd();
-    const file = try dir.openFile("./src/calories.txt", File.OpenFlags{.mode = .read_only});
+    const file = try dir.openFile("./inputs/calories.txt", File.OpenFlags{.mode = .read_only});
     defer file.close();
     var reader = file.reader();
 
@@ -66,9 +66,9 @@ fn parse_string(str: []u8) ParseStringError!u32 {
     for (str) |c| {
         switch (c) {
             '0'...'9' => {
-                var cast: u32 = undefined;
-                if (@mulWithOverflow(u32, r, 10, &cast)) { return ParseStringError.Overflow; }
-                r = cast + (c - '0');
+                var cast = @mulWithOverflow(r, 10);
+                if (cast[1] == 1) { return ParseStringError.Overflow; }
+                r = cast[0] + (c - '0');
             },
             else => return ParseStringError.NotANumber,
         }
