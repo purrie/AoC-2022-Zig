@@ -35,7 +35,7 @@ pub fn build(b: *std.build.Builder) void {
         .root_source_file = src,
         .target = target,
         .optimize = mode,
-        .name = "AoC-2022-Zig-Test"
+        .name = "AoC-2022-Zig-Test",
     };
     const exe_tests = b.addTest(test_options);
 
