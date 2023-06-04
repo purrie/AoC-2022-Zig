@@ -9,6 +9,7 @@ pub fn run(stdout : anytype) !void {
 
     var arena = std.heap.ArenaAllocator.init(std.heap.page_allocator);
     var tree = try Tree.create(arena.allocator());
+    defer arena.deinit();
 
     var breader = Breader{ .unbuffered_reader = file.reader() };
     var reader = breader.reader();
